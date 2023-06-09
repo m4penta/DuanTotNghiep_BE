@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Include head particial -->
+<%- include('../../partials/head.ejs') %>
+
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <%- include('../../partials/navbar') %>../
+    <!-- Main Sidebar Container -->
+    <%- include('../../partials/main-sidebar.ejs') %>
+    <!-- Content Wrapper. -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <%- include('../../partials/content-header.ejs', {message: `Quản lý bài
+        viết`}) %>
+      <!-- Main content -->
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Danh sách loại</h3>
+                </div>
+                <div class="card-body table-responsive">
+                  <table id="datatable" class="table table-hover text-nowrap display">
+                    <thead>
+                      <tr>
+                        <th style="width: 10px">STT</th>
+                        <th>Tên loại</th>
+                        <th>Slug</th>
+                        <th style="text-align: center" class="pl-0 pr-0">
+                          Sửa
+                        </th>
+                        <th style="text-align: center" class="pl-0">Xoá</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% categories.forEach((el, index) => { %>
+                      <tr>
+                        <td><%= ++index %></td>
+                        <td><%= el.name %></td>
+                        <td><%= el.slug %></td>
+                        <td style="text-align: center">
+                          <a href="/category-manager/edit?id=<%= el._id %>">
+                            <i class="far fa-edit" style="cursor: pointer; color: red"></i>
+                          </a>
+                        </td>
+                        <td style="text-align: center">
+                          <a onclick="return confirm('Bạn có chắc hành động xoá, thao tác này không thể hoàn tác?')" href="/category-manager/delete/<%= el._id %>">
+                            <i class="far fa-trash-alt" style="cursor: pointer; color: rgb(87, 218, 0)"></i>
+                          </a>
+                        </td>
+                      </tr>
+                      <% }) %>
+                    </tbody>
+                  </table>
+                </div>
+                <% if (categories.length < 0) { %>
+                <h6 class="p-4 text-center">
+                  Chưa có bài viết.
+                  <a href="/product-manager/add">Thêm bài viết.</a>
+                </h6>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Script -->
+  <script src="../plugins/jquery/jquery.min.js"></script>
+  <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../dist/js/adminlte.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#datatable').DataTable();
+    });
+  </script>
+</body>
+
+</html>

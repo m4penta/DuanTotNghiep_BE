@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Include head particial -->
+<%- include('../../partials/head.ejs') %>
+<!-- Body -->
+
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <%- include('../../partials/navbar') %>
+    <!-- Main Sidebar Container -->
+    <%- include('../../partials/main-sidebar.ejs') %>
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <%- include('../../partials/content-header.ejs') %>
+      <!-- Main content -->
+      <div class="content mt-3">
+        <div class="container-fluid">
+          <div class="card card-info">
+            <div class="card-header">
+              <h3 class="card-title text-uppercase">Thêm Sản phẩm</h3>
+            </div>
+            <form action="/product-manager/add" method="POST" id="product-form" enctype="multipart/form-data">
+              <div class="card-body">
+                <div class="row">
+                  <div class="form-group col-3">
+                    <label>Loại sản phẩm</label>
+                    <select name="category" required class="form-control">
+                      <option value=""></option>
+                      <% if (category.length > 0) { %>
+                      <% category.forEach(element => { %>
+                      <option value="<%= element._id %>">
+                        <%= element.name %>
+                      </option>
+                      <% }) %>
+                      <% } %>
+                    </select>
+                  </div>
+                  <div class="form-group col-3">
+                    <label>Thương hiệu</label>
+                    <select name="brand" required class="form-control">
+                      <option value=""></option>
+                      <% if (brand.length > 0) { %>
+                      <% brand.forEach(element => { %>
+                      <option value="<%= element._id %>">
+                        <%= element.name %>
+                      </option>
+                      <% }) %>
+                      <% } %>
+                    </select>
+                  </div>
+                  <div class="form-group col-3">
+                    <label>Giảm giá (%)</label>
+                    <input type="number" name="discount" value="0" min="0" max="100" class="form-control" />
+                  </div>
+                  <div class="form-group col-3">
+                    <label>Flash sale</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <input type="checkbox" name="flashsale" />
+                        </span>
+                      </div>
+                      <input type="text" class="form-control" name="flashsale_end_date" />
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="form-group col-6">
+                    <label for="name">Tên sản phẩm</label>
+                    <input type="text" id="name" name="name" class="form-control" required />
+                  </div>
+                  <div class="form-group col-6">
+                    <label for="slug">Slug</label>
+                    <input type="text" id="slug" name="slug" class="form-control" required />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="form-group col-1">
+                    <label for="amount">Số lượng</label>
+                    <input type="number" name="amount" id="amount" value="1" min="1" class="form-control">
+                  </div>
+                  <div class="form-group col-5">
+                    <label for="product-image">Hình ảnh sản phẩm</label>
+                    <div class="input-group">
+                      <div class="custom-file">
+                        <input type="file" multiple accept="image/*" required name="product-image" id="product-image" class="custom-file-input">
+                        <label class="custom-file-label" for="product-image">Thêm hình ảnh</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group col-3">
+                    <label for="banner">Ảnh banner</label>
+                    <div class="input-group">
+                      <div class="custom-file">
+                        <input type="file" name="banner" id="banner" accept="image/*" class="custom-file-input" />
+                        <label for="banner" class="custom-file-label">Thêm hình ảnh</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group col-3">
+                    <label for="thumbnail">Ảnh thumbnail</label>
+                    <div class="input-group">
+                      <div class="custom-file">
+                        <input type="file" accept="image/*" name="thumbnail" required id="thumbnail" class="custom-file-input" />
+                        <label for="thumbnail" class="custom-file-label">Thêm hình ảnh</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                    <label class="card-heading pt-2">Thông số sản phẩm</label>
+                    <div class="row">
+                      <div class="form-group col-3">
+                        <label>Màn hình</label>
+                        <input type="text" name="specs" class="form-control" required />
+                      </div>
+                      <div class="form-group col-3">
+                        <label>Hệ điều hành</label>
+                        <input type="text" name="specs" class="form-control" required />
+                      </div>
+                      <div class="form-group col-3">
+                        <label>Camera sau</label>
+                        <input type="text" name="specs" class="form-control" required />
+                      </div>
+                      <div class="form-group col-3">
+                        <label>Camera Trước</label>
+                        <input type="text" name="specs" class="form-control" required />
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group col-3">
+                        <label>Chip</label>
+                        <input type="text" name="specs" class="form-control" required />
+                      </div>
+                      <div class="form-group col-3">
+                        <label>RAM</label>
+                        <input type="text" name="specs" class="form-control" required />
+                      </div>
+                      <div class="form-group col-3">
+                        <label>Sim</label>
+                        <input type="text" name="specs" class="form-control" required />
+                      </div>
+                      <div class="form-group col-3">
+                        <label>Pin, Sạc</label>
+                        <input type="text" name="specs" class="form-control" required />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <h4 class="heading">Giá bán</h4>
+                    <div class="row">
+                      <div class="col-4">
+                        <h4>Option 1</h4>
+                        <div class="form-group">
+                          <label>Giá</label>
+                          <input type="text" name="price_option" class="form-control price" required />
+                        </div>
+                        <div class="form-group">
+                          <label>Dung lượng</label>
+                          <input type="text" name="price_option" class="form-control" required />
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <h4>Option 2</h4>
+                        <div class="form-group">
+                          <label>Giá</label>
+                          <input type="text" name="price_option" class="form-control price" />
+                        </div>
+                        <div class="form-group">
+                          <label>Dung lượng</label>
+                          <input type="text" name="price_option" class="form-control" />
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <h4>Option 3</h4>
+                        <div class="form-group">
+                          <label>Giá</label>
+                          <input type="text" name="price_option" class="form-control price" />
+                        </div>
+                        <div class="form-group">
+                          <label>Dung lượng</label>
+                          <input type="text" name="price_option" class="form-control" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <h4 class="heading">Màu sắc</h4>
+                    <div class="row">
+                      <div class="col-4">
+                        <h4>Option 1</h4>
+                        <div class="form-group">
+                          <label>Màu</label>
+                          <input type="text" name="color_option" class="form-control" required />
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <h4>Option 2</h4>
+                        <div class="form-group">
+                          <label>Màu</label>
+                          <input type="text" name="color_option" class="form-control" />
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <h4>Option 3</h4>
+                        <div class="form-group">
+                          <label>Màu</label>
+                          <input type="text" name="color_option" class="form-control" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="content">Mô tả</label>
+                  <textarea class="form-control" name="content" id="content" rows="5"></textarea>
+                </div>
+                <div class="form-group">
+                  <button type="submit" class="btn btn-primary mr-2">
+                    Thêm sản phẩm
+                  </button>
+                  <button type="reset" class="btn btn-warning">
+                    Nhập lại
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% if (message) { %>
+    <div class="message-popup" id="message-popup"><%= message %></div>
+    <% } %>
+  </div>
+  <!-- Script -->
+  <script src="../plugins/jquery/jquery.min.js"></script>
+  <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../dist/js/adminlte.min.js"></script>
+  <script src="../plugins/moment/moment-with-locales.min.js"></script>
+  <script src="../plugins/daterangepicker/daterangepicker.js"></script>
+  <script src="../plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+  <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+  <script>
+    $(function() {
+      bsCustomFileInput.init();
+    });
+  </script>
+  <script>
+    const slugify = (string) => {
+      const a =
+        'àáäâãåăæąçćčđďèéěėëêęğǵḧìíïîįłḿǹńňñòóöôœøṕŕřßşśšșťțùúüûǘůűūųẃẍÿýźžż·/_,:;';
+      const b =
+        'aaaaaaaaacccddeeeeeeegghiiiiilmnnnnooooooprrsssssttuuuuuuuuuwxyyzzz------';
+      const p = new RegExp(a.split('').join('|'), 'g');
+      return string
+        .toString()
+        .toLowerCase()
+        .replace(/á|à|ả|ạ|ã|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'a')
+        .replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, 'e')
+        .replace(/i|í|ì|ỉ|ĩ|ị/gi, 'i')
+        .replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/gi, 'o')
+        .replace(/ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự/gi, 'u')
+        .replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, 'y')
+        .replace(/đ/gi, 'd')
+        .replace(/\s+/g, '-')
+        .replace(p, (c) => b.charAt(a.indexOf(c)))
+        .replace(/&/g, '-and-')
+        .replace(/[^\w\-]+/g, '')
+        .replace(/\-\-+/g, '-')
+        .replace(/^-+/, '')
+        .replace(/-+$/, '');
+    };
+    document.querySelectorAll('.price')?.forEach(el => {
+      el.addEventListener('keyup', e => {
+        if (!e.target.value) {
+          return e.target.value = '';
+        }
+        let n = parseInt(e.target.value.replace(/\D/g, ''), 10);
+        e.target.value = n.toLocaleString();
+      })
+    });
+    document.querySelector('#name')?.addEventListener('keyup', e => {
+      document.querySelector('#slug').value = slugify(e.target.value)
+    })
+    document.querySelector('#product-form')?.reset();
+    setTimeout(() => {
+      document.querySelector('#message-popup')?.remove()
+    }, 3000);
+  </script>
+  <script>
+    CKEDITOR.replace('content');
+  </script>
+</body>
+
+</html>

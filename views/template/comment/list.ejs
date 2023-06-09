@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Include head particial -->
+<%- include('../../partials/head.ejs') %>
+
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <%- include('../../partials/navbar') %>../
+    <!-- Main Sidebar Container -->
+    <%- include('../../partials/main-sidebar.ejs') %>
+    <!-- Content Wrapper. -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <%- include('../../partials/content-header.ejs', {message: `Quản lý bình luận`}) %>
+      <!-- Main content -->
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Danh sách bình luận</h3>
+                </div>
+                <div class="card-body table-responsive">
+                  <table id="table_id" class="table table-hover text-nowrap">
+                    <thead>
+                      <tr>
+                        <th style="width: 4px">STT</th>
+                        <th style="max-width: 200px;">Sản phẩm</th>
+                        <th style="max-width: 250px;">Nội dung</th>
+                        <th>Người đăng</th>
+                        <th>Email</th>
+                        <!-- <th>Hình ảnh</th> -->
+                        <th style="text-align: center" class="pl-0 pr-0">
+                          Thao tác
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% comments.forEach((comment, index) => { %>
+                      <tr>
+                        <td><%= ++index %></td>
+                        <td>
+                          <p class="d-inline-block text-truncate" style="max-width: 200px;">
+                            <%= comment.product.name %>
+                          </p>
+                        </td>
+                        <td>
+                          <p class="d-inline-block text-truncate" style="max-width: 250px;">
+                            <%= comment.content %>
+                          </p>
+                        </td>
+                        <td><%= comment.user.firstName + ' ' + comment.user.lastName %></td>
+                        <td><%= comment.user.email %></td>
+                        <td><a href="/comment-manager/detail?id=<%= comment._id %>">Chi tiết</a></td>
+                      </tr>
+                      <% }) %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Script -->
+  <script src="../plugins/jquery/jquery.min.js"></script>
+  <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../dist/js/adminlte.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#table_id').DataTable();
+    });
+  </script>
+</body>
+
+</html>

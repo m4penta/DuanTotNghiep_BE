@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Include head particial -->
+<%- include('../../partials/head.ejs') %>
+
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <%- include('../../partials/navbar') %>../
+    <!-- Main Sidebar Container -->
+    <%- include('../../partials/main-sidebar.ejs') %>
+    <!-- Content Wrapper. -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <%- include('../../partials/content-header.ejs', {message: `Quản lý đơn
+        hàng`}) %>
+      <!-- Main content -->
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Danh sách người dùng</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                  <table id="table_id" class="display">
+                    <thead>
+                      <tr>
+                        <th>STT</th>
+                        <th>Tên</th>
+                        <th>Email</th>
+                        <th>SĐT</th>
+                        <th>Ngày sinh</th>
+                        <th>Hình ảnh</th>
+                        <th>Giới tính</th>
+                        <th>Quyền</th>
+                        <th>Thao tác</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% users.forEach((user, index) => { %>
+                      <tr>
+                        <td><%= ++index %></td>
+                        <td><%= user.firstName + ' ' + user.lastName %> </td>
+                        <td><%= user.email %></td>
+                        <td>0<%= user.phone %></td>
+                        <td><%= user.dayOfBirth %></td>
+                        <td><img style="width: 50px; height: 50px; overflow: hidden;" src="<%=user.image %>" alt=""></td>
+                        <td><%= user.gender %></td>
+                        <td><%= user.role %></td>
+                        <% if (user.role !== 'admin') { %>
+                        <td><a class="btn btn-primary" onclick="return confirm('Bạn có chắc!')" href="/user-manager/authorize/<%= user._id %>">Cấp quyền</a></td>
+                        <% }else { %>
+                        <td><a class="btn btn-warning" onclick="return confirm('Bạn có chắc!')" href="/user-manager/unauthorize/<%= user._id %>">Huỷ quyền</a></td>
+                        <% } %>
+                      </tr>
+                      <% }) %>
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.card-body -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script -->
+  <script src="../plugins/jquery/jquery.min.js"></script>
+  <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../dist/js/adminlte.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#table_id').DataTable();
+    });
+  </script>
+</body>
+
+</html>

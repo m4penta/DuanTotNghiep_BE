@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Include head particial -->
+<%- include('../../partials/head.ejs') %>
+<style>
+  .comment-product {
+    margin-bottom: 1.6rem;
+  }
+
+  .comment-item {
+    display: flex;
+    gap: 1.4rem;
+    align-items: flex-start;
+    margin-bottom: 1.2rem;
+  }
+
+  .comment-item-img {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgba(105, 90, 205, 0.548);
+  }
+
+  .comment-item-user {
+    margin-bottom: 0;
+  }
+
+  .comment-item-user {
+    font-weight: 600;
+  }
+</style>
+<!-- Body -->
+
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <%- include('../../partials/navbar') %>
+    <!-- Main Sidebar Container -->
+    <%- include('../../partials/main-sidebar.ejs') %>
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <%- include('../../partials/content-header.ejs') %>
+      <!-- Main content -->
+      <div class="content mt-3">
+        <div class="container-fluid">
+          <div class="card card-info">
+            <div class="card-header">
+              <h3 class="card-title text-uppercase">Trả lời bình luận</h3>
+            </div>
+            <div class="card-body">
+              <h3 class="comment-product"><%= comment.product.name %></h3>
+              <div class="comment">
+                <div class="comment-item">
+                  <div class="comment-item-media">
+                    <img src="<%= comment.user.image %>" alt="" class="comment-item-img">
+                  </div>
+                  <div class="comment-item-detail">
+                    <p class="comment-item-user">
+                      <%= comment.user.firstName + ' ' + comment.user.lastName %>
+                    </p>
+                    <p class="comment-item-text">
+                      <%= comment.content %>
+                    </p>
+                  </div>
+                </div>
+                <ul class="comment-list">
+                  <% comment.replyComment.forEach((el, index) => { %>
+                  <div class="comment-item">
+                    <div class="comment-item-media">
+                      <img src="<%= el.user.image %>" alt="" class="comment-item-img">
+                    </div>
+                    <div class="comment-item-detail">
+                      <p class="comment-item-user">
+                        <%= el.user.firstName + ' ' + el.user.lastName %>
+                      </p>
+                      <p class="comment-item-text">
+                        <%= el.content %>
+                      </p>
+                    </div>
+                  </div>
+                  <% }) %>
+                  <form action="/comment-manager/reply?id=<%= comment._id %>" method="post" class="comment-form">
+                    <input type="hidden" name="productId" value="<%= comment.product._id %>">
+                    <div class="form-group">
+                      <label for="commentInput">Nội dung</label>
+                      <textarea class="form-control" placeholder="Nhập nội dung" name="content" minlength="1" required></textarea>
+                    </div>
+                    <div class="form-group">
+                      <button type="submit" class="btn btn-primary">Trả lời</button>
+                    </div>
+                  </form>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% if (message) { %>
+    <div class="message-popup" id="message-popup"><%= message %></div>
+    <% } %>
+  </div>
+  <!-- Script -->
+  <script src="../plugins/jquery/jquery.min.js"></script>
+  <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../dist/js/adminlte.min.js"></script>
+  <script src="../plugins/moment/moment-with-locales.min.js"></script>
+  <script src="../plugins/daterangepicker/daterangepicker.js"></script>
+  <script src="../plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+  <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+  <script>
+    $(function() {
+      bsCustomFileInput.init();
+    });
+  </script>
+  <script>
+    const slugify = (string) => {
+      const a =
+        'àáäâãåăæąçćčđďèéěėëêęğǵḧìíïîįłḿǹńňñòóöôœøṕŕřßşśšșťțùúüûǘůűūųẃẍÿýźžż·/_,:;';
+      const b =
+        'aaaaaaaaacccddeeeeeeegghiiiiilmnnnnooooooprrsssssttuuuuuuuuuwxyyzzz------';
+      const p = new RegExp(a.split('').join('|'), 'g');
+      return string
+        .toString()
+        .toLowerCase()
+        .replace(/á|à|ả|ạ|ã|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'a')
+        .replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, 'e')
+        .replace(/i|í|ì|ỉ|ĩ|ị/gi, 'i')
+        .replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/gi, 'o')
+        .replace(/ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự/gi, 'u')
+        .replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, 'y')
+        .replace(/đ/gi, 'd')
+        .replace(/\s+/g, '-')
+        .replace(p, (c) => b.charAt(a.indexOf(c)))
+        .replace(/&/g, '-and-')
+        .replace(/[^\w\-]+/g, '')
+        .replace(/\-\-+/g, '-')
+        .replace(/^-+/, '')
+        .replace(/-+$/, '');
+    };
+    document.querySelectorAll('.price')?.forEach((el) => {
+      el.addEventListener('keyup', (e) => {
+        if (!e.target.value) {
+          return (e.target.value = '');
+        }
+        let n = parseInt(e.target.value.replace(/\D/g, ''), 10);
+        e.target.value = n.toLocaleString();
+      });
+    });
+    document.querySelector('#name')?.addEventListener('keyup', (e) => {
+      document.querySelector('#slug').value = slugify(e.target.value);
+    });
+    document.querySelector('#product-form')?.reset();
+    setTimeout(() => {
+      document.querySelector('#message-popup')?.remove();
+    }, 3000);
+  </script>
+</body>
+
+</html>

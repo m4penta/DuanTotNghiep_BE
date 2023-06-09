@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Include head particial -->
+<%- include('../../partials/head.ejs') %>
+<!-- Body -->
+
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <%- include('../../partials/navbar') %>
+    <!-- Main Sidebar Container -->
+    <%- include('../../partials/main-sidebar.ejs') %>
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <%- include('../../partials/content-header.ejs') %>
+      <!-- Main content -->
+      <div class="content mt-3">
+        <div class="container-fluid">
+          <div class="card card-info">
+            <div class="card-header">
+              <h3 class="card-title text-uppercase">Sửa danh mục</h3>
+            </div>
+            <form action="/category-manager/edit?id=<%= category._id %>" method="POST" id="product-form">
+              <div class="card-body">
+                <div class="row">
+                  <div class="form-group col-6">
+                    <label for="name">Tên danh mục</label>
+                    <input type="text" id="name" value="<%= category.name %>" name="name" class="form-control" />
+                  </div>
+                  <div class="form-group col-6">
+                    <label for="slug">Slug</label>
+                    <input type="text" id="slug" name="slug" value="<%= category.slug %>" class="form-control" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <button type="submit" class="btn btn-primary mr-2">
+                    Lưu thay đổi
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% if (message) { %>
+    <div class="message-popup" id="message-popup"><%= message %></div>
+    <% } %>
+  </div>
+  <!-- Script -->
+  <script src="../plugins/jquery/jquery.min.js"></script>
+  <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../dist/js/adminlte.min.js"></script>
+  <script src="../plugins/moment/moment-with-locales.min.js"></script>
+  <script src="../plugins/daterangepicker/daterangepicker.js"></script>
+  <script src="../plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+  <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+  <script>
+    $(function() {
+      bsCustomFileInput.init();
+    });
+  </script>
+  <script>
+    const slugify = (string) => {
+      const a =
+        'àáäâãåăæąçćčđďèéěėëêęğǵḧìíïîįłḿǹńňñòóöôœøṕŕřßşśšșťțùúüûǘůűūųẃẍÿýźžż·/_,:;';
+      const b =
+        'aaaaaaaaacccddeeeeeeegghiiiiilmnnnnooooooprrsssssttuuuuuuuuuwxyyzzz------';
+      const p = new RegExp(a.split('').join('|'), 'g');
+      return string
+        .toString()
+        .toLowerCase()
+        .replace(/á|à|ả|ạ|ã|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'a')
+        .replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, 'e')
+        .replace(/i|í|ì|ỉ|ĩ|ị/gi, 'i')
+        .replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/gi, 'o')
+        .replace(/ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự/gi, 'u')
+        .replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, 'y')
+        .replace(/đ/gi, 'd')
+        .replace(/\s+/g, '-')
+        .replace(p, (c) => b.charAt(a.indexOf(c)))
+        .replace(/&/g, '-and-')
+        .replace(/[^\w\-]+/g, '')
+        .replace(/\-\-+/g, '-')
+        .replace(/^-+/, '')
+        .replace(/-+$/, '');
+    };
+    document.querySelectorAll('.price')?.forEach((el) => {
+      el.addEventListener('keyup', (e) => {
+        if (!e.target.value) {
+          return (e.target.value = '');
+        }
+        let n = parseInt(e.target.value.replace(/\D/g, ''), 10);
+        e.target.value = n.toLocaleString();
+      });
+    });
+    document.querySelector('#name')?.addEventListener('keyup', (e) => {
+      document.querySelector('#slug').value = slugify(e.target.value);
+    });
+    document.querySelector('#product-form')?.reset();
+    setTimeout(() => {
+      document.querySelector('#message-popup')?.remove();
+    }, 3000);
+  </script>
+  <script>
+    CKEDITOR.replace('content');
+  </script>
+</body>
+
+</html>

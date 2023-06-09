@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Include head particial -->
+<%- include('../../partials/head.ejs') %>
+<style>
+  .visualize-box {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+
+  .visualize-item:first-child {
+    background-color: #2E4C6D;
+  }
+
+  .visualize-item:nth-child(2) {
+    background-color: #6E3CBC;
+  }
+
+  .visualize-item:nth-child(3) {
+    background-color: #F3950D;
+  }
+
+  .visualize-item:last-child {
+    background-color: #17D7A0;
+  }
+
+  .visualize-item {
+    color: #fff;
+    padding: 1rem;
+    border-radius: 1rem;
+  }
+
+  .visualize-item-text {
+    text-transform: capitalize;
+  }
+
+  .visualize-item-content-detail {
+    font-size: 1.6rem;
+  }
+</style>
+
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <%- include('../../partials/navbar') %>
+    <!-- Main Sidebar Container -->
+    <%- include('../../partials/main-sidebar.ejs') %>
+    <!-- Content Wrapper. -->
+    <div class="content-wrapper mt-3">
+      <!-- Content Header (Page header) -->
+      <%- include('../../partials/content-header.ejs', {message: `Thống kê`}) %>
+      <!-- Main content -->
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Thống kê</h3>
+                </div>
+                <div class="card-body">
+                  <div class="visualize">
+                    <div class="visualize-box">
+                      <div class="visualize-item">
+                        <div class="visualize-item-heading">
+                          <h5 class="visualize-item-text">Sản phẩm</h5>
+                        </div>
+                        <div class="visualize-item-content">
+                          <p class="visualize-item-content-detail">
+                            <%= productAmount %>
+                          </p>
+                        </div>
+                      </div>
+                      <div class="visualize-item">
+                        <div class="visualize-item-heading">
+                          <h5 class="visualize-item-text">Khách hàng</h5>
+                        </div>
+                        <div class="visualize-item-content">
+                          <p class="visualize-item-content-detail">
+                            <%= userAmount %>
+                          </p>
+                        </div>
+                      </div>
+                      <div class="visualize-item">
+                        <div class="visualize-item-heading">
+                          <h5 class="visualize-item-text">Đơn hàng</h5>
+                        </div>
+                        <div class="visualize-item-content">
+                          <p class="visualize-item-content-detail">
+                            <%= orderAmount %>
+                          </p>
+                        </div>
+                      </div>
+                      <div class="visualize-item">
+                        <div class="visualize-item-heading">
+                          <h5 class="visualize-item-text">Doanh thu</h5>
+                        </div>
+                        <div class="visualize-item-content">
+                          <p class="visualize-item-content-detail" id="sales">
+                            <%= sales %>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Script -->
+  <script src="../plugins/jquery/jquery.min.js"></script>
+  <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../dist/js/adminlte.min.js"></script>
+  <script>
+    window.addEventListener('load', e => {
+      const salesEl = document.querySelector('#sales');
+      salesEl.textContent = parseInt(salesEl.textContent).toLocaleString() + 'đ';
+    })
+  </script>
+</body>
+
+</html>

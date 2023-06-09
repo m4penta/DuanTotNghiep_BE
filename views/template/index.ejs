@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Head -->
+<%- include('../partials/head.ejs') %>
+<!-- Body -->
+
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Nav bar -->
+    <%- include('../partials/navbar.ejs') %>
+    <!-- Sidebar -->
+    <%- include('../partials/main-sidebar.ejs') %>
+    <!-- Content wrap -->
+    <div class="content-wrapper">
+      <!-- Content header -->
+      <%- include('../partials/content-header.ejs', {message: `Chào mừng bạn
+        đến với trang quản lý 🙌`}) %>
+      <!-- Main content -->
+      <div class="content">
+        <div class="container-fluid"></div>
+      </div>
+    </div>
+    <!-- Footer -->
+    <%- include('../partials/main-footer.ejs') %>
+  </div>
+  <!-- Script -->
+  <script src="plugins/jquery/jquery.min.js"></script>
+  <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="dist/js/adminlte.min.js"></script>
+</body>
+
+</html>

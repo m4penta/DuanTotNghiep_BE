@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Include head particial -->
+<%- include('../../partials/head.ejs') %>
+
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <%- include('../../partials/navbar') %>../
+    <!-- Main Sidebar Container -->
+    <%- include('../../partials/main-sidebar.ejs') %>
+    <!-- Content Wrapper. -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <%- include('../../partials/content-header.ejs', {message: `Quản lý bài
+        viết`}) %>
+      <!-- Main content -->
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <p class="pl-2">
+              Count: <%= paginate.totalRows %> - Page: <%= paginate.page %> /
+              <%= paginate.totalPages %>
+            </p>
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Danh sách bài viết</h3>
+
+                  <div class="card-tools">
+                    <div class="input-group input-group-sm" style="width: 150px">
+                      <input type="text" name="table_search" class="form-control float-right" placeholder="Search" />
+
+                      <div class="input-group-append">
+                        <button type="submit" class="btn btn-default">
+                          <i class="fas fa-search"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body table-responsive p-0">
+                  <table class="table table-hover text-nowrap">
+                    <thead>
+                      <tr>
+                        <th style="width: 10px">STT</th>
+                        <th>Danh mục</th>
+                        <th>Thương hiệu</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Số lượng</th>
+                        <th>Ngày đăng</th>
+                        <th>Lượt xem</th>
+                        <th style="text-align: center" class="pl-0 pr-0">
+                          Sửa
+                        </th>
+                        <th style="text-align: center" class="pl-0">Xoá</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% products.forEach((product, index) => { %>
+                      <tr>
+                        <td style="text-align: center"><%= ++index %></td>
+                        <td><%= product.category.name %></td>
+                        <td><%= product.brand.name %></td>
+                        <td style="
+                              max-width: 250px;
+                              overflow: hidden;
+                              text-overflow: ellipsis;
+                              white-space: nowrap; ;
+                            ">
+                          <%= product.name %>
+                        </td>
+                        <td><%= product.amount %></td>
+                        <td data-timeCreate="<%= product.created_at %>" class="createTime"></td>
+                        <td><%= product.view %></td>
+                        <td style="text-align: center">
+                          <a href="/product-manager/edit?id=<%= product._id %>">
+                            <i class="far fa-edit" style="cursor: pointer; color: red"></i>
+                          </a>
+                        </td>
+                        <td style="text-align: center">
+                          <a onclick="return confirm('Bạn có chắc hành động xoá, thao tác này không thể hoàn tác?')" href="/product-manager/delete/<%= product._id %>">
+                            <i class="far fa-trash-alt" style="cursor: pointer; color: rgb(87, 218, 0)"></i>
+                          </a>
+                        </td>
+                      </tr>
+                      <% }) %>
+                    </tbody>
+                  </table>
+                </div>
+                <% if (products.length < 0) { %>
+                <h6 class="p-4 text-center">
+                  Chưa có bài viết.
+                  <a href="/product-manager/add">Thêm bài viết.</a>
+                </h6>
+                <% } %>
+                <div class="card-footer">
+                  <% if (paginate.page - 1 > 0) { %>
+                  <a href="/product-manager/list?page=<%= paginate.page - 1 %>&limit=<%= paginate.limit %>" class="btn btn-primary btn-sm">
+                    <i class="fas fa-chevron-left"></i>
+                  </a>
+                  <% } %>
+                  <span>
+                    <% for( let index = 0; index < paginate.totalPages;
+                      index++ ) { %>
+                    <a href="/product-manager/list?page=<%= index + 1 %>&limit=<%= paginate.limit %>" class="pl-1 pr-1"><%= index + 1 %>
+                    </a>
+                    <% } %>
+                  </span>
+                  <% if (paginate.page + 1 <= paginate.totalPages) { %>
+                  <a href="/product-manager/list?page=<%= paginate.page + 1 %>&limit=<%= paginate.limit %>" class="btn btn-primary btn-sm">
+                    <i class="fas fa-chevron-right"></i>
+                  </a>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Script -->
+  <script src="../plugins/jquery/jquery.min.js"></script>
+  <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../dist/js/adminlte.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    document.querySelectorAll('.createTime')?.forEach(el => {
+      el.textContent = moment(el.dataset.timeCreate).format('DD/MM/YYYY')
+    });
+  </script>
+</body>
+
+</html>
