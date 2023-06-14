@@ -2,6 +2,7 @@ const categoryModel = require('../models/model.category');
 const productModel = require('../models/model.product');
 
 class CategoryController {
+
   async index(req, res) {
     try {
       const categories = await categoryModel.find();
@@ -10,6 +11,7 @@ class CategoryController {
       return res.status(400).json(error);
     }
   }
+ 
   async detail(req, res) {
     const { id: categoryId } = req.params;
     try {
