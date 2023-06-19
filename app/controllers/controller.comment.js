@@ -62,11 +62,14 @@ class CommentController {
         { path: 'product', select: 'name' },
         { path: 'user', select: 'firstName lastName email role image' },
       ]);
+      console.log(comments);
       return res.status(200).render('template/comment/list', { comments });
+      // return res.status(200).json(comments);
     } catch (error) {
       return res.status(300).rerender('/');
     }
   }
+
   async adminGetDetail(req, res) {
     try {
       const { id } = req.query;

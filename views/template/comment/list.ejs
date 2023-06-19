@@ -38,21 +38,21 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <% comments.forEach((comment, index) => { %>
+                      <% comments?.forEach((comment, index) => { %>
                       <tr>
                         <td><%= ++index %></td>
                         <td>
                           <p class="d-inline-block text-truncate" style="max-width: 200px;">
-                            <%= comment.product.name %>
+                            <%= comment?.product?.name %>
                           </p>
                         </td>
                         <td>
                           <p class="d-inline-block text-truncate" style="max-width: 250px;">
-                            <%= comment.content %>
+                            <%= comment?.content %>
                           </p>
                         </td>
-                        <td><%= comment.user.firstName + ' ' + comment.user.lastName %></td>
-                        <td><%= comment.user.email %></td>
+                        <td><%= comment?.user?.firstName + ' ' + comment?.user?.lastName %></td>
+                        <td><%= comment?.user?.email %></td>
                         <td><a href="/comment-manager/detail?id=<%= comment._id %>">Chi tiết</a></td>
                       </tr>
                       <% }) %>
