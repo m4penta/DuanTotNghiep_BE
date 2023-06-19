@@ -16,5 +16,5 @@ const commentSchema = new Schema(
   },
   { timestamps: { createdAt: 'created_at' }, collection: 'comment' }
 );
-
+//create Schema model
 module.exports = model('comment', commentSchema);

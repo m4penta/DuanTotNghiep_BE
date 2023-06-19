@@ -42,6 +42,7 @@ const initialApp = (app) => {
 
   // Visualize
   app.use('/visualize', adminAuth, visualizeRouter);
+  //comment
   app.use('/comment-manager', adminAuth, adminCommentRouter);
   // Dashboard Order
   app.use('/order', adminAuth, orderAdminRouter);

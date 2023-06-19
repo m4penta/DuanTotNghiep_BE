@@ -13,7 +13,7 @@ class CommentController {
       res.status(502).json({ status: false, error });
     }
   };
-
+//[GET] get detail
   detail = async (req, res) => {
     try {
       const { id: productId } = req.params;
