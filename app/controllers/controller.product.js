@@ -16,14 +16,13 @@ class ProductController {
       const { page = 1, limit = 10, category, sort } = req.query;
       //Tính tổng số hàng dữ liệu (totalRows) dựa trên giá trị của category.
       // Nếu category tồn tại, sẽ
-      //đếm số lượng sản phẩm có category tương ứng; nếu không, 
+      //đếm số lượng sản phẩm có category tương ứng; nếu không,
       //sẽ đếm tất cả sản phẩm.
       const totalRows = category
-      
         ? await ProductModel.find({ ...(category && { category }) }).count()
         : await ProductModel.count();
 
-       //Tính số trang tối đa (totalPages) dựa trên tổng số hàng và giới hạn số lượng hàng trên mỗi trang (limit). 
+      //Tính số trang tối đa (totalPages) dựa trên tổng số hàng và giới hạn số lượng hàng trên mỗi trang (limit).
       const totalPages = Math.ceil(totalRows / limit);
 
       const filter = {
@@ -320,7 +319,7 @@ class ProductController {
           return prev;
         }
         const newObj = {
-          price: parseInt(arr[index].split(',').join('')),
+          price: parseInt(arr[index].replace(/\./g, '')),
           value: arr[index + 1],
         };
         return [...prev, newObj];

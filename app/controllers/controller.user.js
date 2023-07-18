@@ -125,4 +125,6 @@ class AuthController {
   }
 }
 
+//[get]
+
 module.exports = new AuthController();
