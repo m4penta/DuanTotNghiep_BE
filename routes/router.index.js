@@ -16,7 +16,7 @@ const adminAuth = require('../middlewares/adminAuth');
 const initialApp = (app) => {
   // *** Site Route ***
   // User route
-  app.use('/api/auth', userRouter);
+  app.use('/api/auth', userRouter); //register - login - update user FE
   // Product route
   app.use('/api', productRouter);
   // Category route
