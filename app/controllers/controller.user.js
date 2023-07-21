@@ -124,7 +124,7 @@ class AuthController {
     }
   }
   //[get] /user/:id/edit
-  async userGetEdit(req, res) {
+  async userGetByid(req, res) {
     try {
       const users = await userModel.findById(req.params.id).select('-password');
       return res.status(200).json(users);
@@ -132,6 +132,16 @@ class AuthController {
       return res.status(400).json({ message: 'Error getting user' });
     }
   }
+  //[get] /user/allUser
+  getAllUsers = async (req, res, next) => {
+    try {
+      const users = await userModel.find();
+      res.json(users);
+    } catch (error) {
+      next(error);
+    }
+  };
+
   //[PUT] /users/:id/update
   // async userUpdate(req, res, next) {
   //   try {
