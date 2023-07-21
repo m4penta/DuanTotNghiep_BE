@@ -123,8 +123,54 @@ class AuthController {
       }
     }
   }
+  //[get] /user/:id/edit
+  async userGetEdit(req, res) {
+    try {
+      const users = await userModel.findById(req.params.id).select('-password');
+      return res.status(200).json(users);
+    } catch (error) {
+      return res.status(400).json({ message: 'Error getting user' });
+    }
+  }
+  //[PUT] /users/:id/update
+  // async userUpdate(req, res, next) {
+  //   try {
+  //     await userModel.updateOne({ _id: req.params.id }, req.body);
+  //     return res.status(200).json({ message: 'User updated successfully' });
+  //   } catch (error) {
+  //     return res.status(400).json({ message: 'Error updating user' });
+  //   }
+  // }
+  // async userGetUpdate(req, res, next) {
+  //   try {
+  //     const updatedUser = await userModel.findByIdAndUpdate(
+  //       { _id: req.params.id },
+  //       req.body,
+  //       { new: true }
+  //     );
+  //     if (!updatedUser) {
+  //       return res.status(404).json({ message: 'User not found' });
+  //     }
+  //     res.json(updatedUser);
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // }
+ 
+    async updateUserById(req, res, next)  {
+    try {
+      const userId = req.params.id;
+      const updatedData = req.body;
+      const updatedUser = await userModel.findByIdAndUpdate(userId, updatedData, { new: true });
+      console.log(updatedUser);
+      if (!updatedUser) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      res.json(updatedUser);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
-
-//[get]
 
 module.exports = new AuthController();
