@@ -68,8 +68,29 @@ class OrderController {
     next(error);
   }
 };
-
-
+//PUT api/store/update/:id
+updateOrderById = async (req, res, next) => {
+  try {
+    const orderId = req.params.id;
+    const updatedData = req.body;
+    const updatedOrder = await orderModel.findByIdAndUpdate(orderId, updatedData, { new: true });
+    if (!updatedOrder) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+    res.json(updatedOrder);
+  } catch (error) {
+    next(error);
+  }
+};
+//DELETE  api/store/delete/:id
+deleteOrderById = async (req, res, next) => {
+  const { id } = req.params;
+  const query = {
+    _id: id,
+  };
+  await orderModel.findByIdAndRemove(query).exec();
+  return res.json({ message: 'delete succesfully' });
+};
 }
 
 module.exports = new OrderController();
