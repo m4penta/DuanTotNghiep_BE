@@ -206,12 +206,16 @@ class AuthController {
   //     next(error);
   //   }
   // }
- 
-    async updateUserById(req, res, next)  {
+
+  async updateUserById(req, res, next) {
     try {
       const userId = req.params.id;
       const updatedData = req.body;
-      const updatedUser = await userModel.findByIdAndUpdate(userId, updatedData, { new: true });
+      const updatedUser = await userModel.findByIdAndUpdate(
+        userId,
+        updatedData,
+        { new: true }
+      );
       console.log(updatedUser);
       if (!updatedUser) {
         return res.status(404).json({ message: 'User not found' });
@@ -220,7 +224,22 @@ class AuthController {
     } catch (error) {
       next(error);
     }
-  };
+  }
+  async getUserInfo(req, res) {
+    try {
+      console.log(req.headers);
+      if (req.headers['authorization']) {
+        const userToken = req.headers['authorization'].split(' ')[1];
+        const { _id: userId } = jwt.decode(userToken);
+        console.log({ userId });
+        const userData = await userModel.findById(userId);
+        res.status(200).json(userData);
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).end();
+    }
+  }
 }
 
 module.exports = new AuthController();

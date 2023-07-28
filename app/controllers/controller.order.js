@@ -1,4 +1,5 @@
 const orderModel = require('../models/model.order');
+const jwt = require('jsonwebtoken');
 
 class OrderController {
   index = async (req, res) => {
@@ -52,45 +53,69 @@ class OrderController {
   // GET api/store/allOrder
   getAllOrders = async (req, res, next) => {
     try {
-      const orders = await orderModel.find();
-      res.json(orders);
+      if (req.headers['authorization']) {
+        const userToken = req.headers['authorization'].split(' ')[1];
+        const { _id: userId } = jwt.decode(userToken);
+        const orders = await orderModel.find({ userId });
+        res.json(orders);
+      }
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  };
+  // POST api/store/create
+  createOrder = async (req, res, next) => {
+    try {
+      console.log(req.headers);
+      if (req.headers['authorization']) {
+        const userToken = req.headers['authorization'].split(' ')[1];
+        const { _id: userId } = jwt.decode(userToken);
+        const orderData = req.body;
+        const newOrder = await orderModel.create({ ...orderData, userId });
+        res.status(201).json(newOrder);
+      }
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  };
+  //PUT api/store/update/:id
+  updateOrderById = async (req, res, next) => {
+    try {
+      const orderId = req.params.id;
+      const updatedData = req.body;
+      const updatedOrder = await orderModel.findByIdAndUpdate(
+        orderId,
+        updatedData,
+        { new: true }
+      );
+      if (!updatedOrder) {
+        return res.status(404).json({ message: 'Order not found' });
+      }
+      res.json(updatedOrder);
     } catch (error) {
       next(error);
     }
   };
-// POST api/store/create
- createOrder = async (req, res, next) => {
-  try {
-    const orderData = req.body;
-    const newOrder = await orderModel.create(orderData);
-    res.status(201).json(newOrder);
-  } catch (error) {
-    next(error);
-  }
-};
-//PUT api/store/update/:id
-updateOrderById = async (req, res, next) => {
-  try {
-    const orderId = req.params.id;
-    const updatedData = req.body;
-    const updatedOrder = await orderModel.findByIdAndUpdate(orderId, updatedData, { new: true });
-    if (!updatedOrder) {
-      return res.status(404).json({ message: 'Order not found' });
-    }
-    res.json(updatedOrder);
-  } catch (error) {
-    next(error);
-  }
-};
-//DELETE  api/store/delete/:id
-deleteOrderById = async (req, res, next) => {
-  const { id } = req.params;
-  const query = {
-    _id: id,
+  //DELETE  api/store/delete/:id
+  deleteOrderById = async (req, res, next) => {
+    const { id } = req.params;
+    const query = {
+      _id: id,
+    };
+    await orderModel.findByIdAndRemove(query).exec();
+    return res.json({ message: 'delete succesfully' });
   };
-  await orderModel.findByIdAndRemove(query).exec();
-  return res.json({ message: 'delete succesfully' });
-};
+  // get
+  findOrder = async (req, res, next) => {
+    const { id } = req.params;
+    const query = {
+      _id: id,
+    };
+    await orderModel.findByIdAndRemove(query).exec();
+    return res.json({ message: 'delete succesfully' });
+  };
 }
 
 module.exports = new OrderController();

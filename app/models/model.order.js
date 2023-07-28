@@ -9,6 +9,7 @@ const orderSchema = new Schema(
     node: String,
     cart: Array,
     priceTotal: Number,
+    userId: String,
     status: { type: String, default: 'Đang xác nhận' },
   },
   { timestamps: true, collection: 'order' }
