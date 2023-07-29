@@ -81,20 +81,49 @@ class OrderController {
     }
   };
   //PUT api/store/update/:id
-  updateOrderById = async (req, res, next) => {
+  // updateOrderById = async (req, res, next) => {
+  //   try {
+  //     const orderId = req.params.id;
+  //     const updatedData = req.body;
+  //     const updatedOrder = await orderModel.findByIdAndUpdate(
+  //       orderId,
+  //       updatedData,
+  //       { new: true }
+  //     );
+  //     if (!updatedOrder) {
+  //       return res.status(404).json({ message: 'Order not found' });
+  //     }
+  //     res.json(updatedOrder);
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // };
+  updateOrderById  = async (req, res, next) => {
     try {
-      const orderId = req.params.id;
-      const updatedData = req.body;
-      const updatedOrder = await orderModel.findByIdAndUpdate(
-        orderId,
-        updatedData,
-        { new: true }
-      );
-      if (!updatedOrder) {
-        return res.status(404).json({ message: 'Order not found' });
+      //console.log(req.headers);
+      if (req.headers['authorization']) {
+        const userToken = req.headers['authorization'].split(' ')[1];
+        //const { _id: userId } = jwt.decode(userToken);
+        const updatedData = req.body;
+        const orderId = req.params.id;// Lấy orderId từ tham số URL
+        console.log(orderId);
+        // Kiểm tra orderId nếu cần thiết (vd: validate orderId có hợp lệ)
+  
+        // Xóa đơn hàng dựa trên orderId và userId
+        const updatedOrder = await orderModel.findByIdAndUpdate(
+                orderId,
+                updatedData,
+                { new: true }
+              );
+  
+        if (!updatedOrder) {
+          return res.status(404).json({ message: 'Order not found' });
+        }
+  
+        res.status(200).json(updatedOrder);
       }
-      res.json(updatedOrder);
     } catch (error) {
+      console.log(error);
       next(error);
     }
   };
@@ -109,12 +138,12 @@ class OrderController {
   // };
   deleteOrderById  = async (req, res, next) => {
     try {
-      console.log(req.headers);
+      //console.log(req.headers);
       if (req.headers['authorization']) {
         const userToken = req.headers['authorization'].split(' ')[1];
         const { _id: userId } = jwt.decode(userToken);
-        const orderId = req.params.orderId; // Lấy orderId từ tham số URL
-  
+        const orderId = req.params.id; // Lấy orderId từ tham số URL
+        console.log(orderId);
         // Kiểm tra orderId nếu cần thiết (vd: validate orderId có hợp lệ)
   
         // Xóa đơn hàng dựa trên orderId và userId
