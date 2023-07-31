@@ -20,6 +20,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public/')));
+app.use('/public/images', express.static('./public/images'))
+app.use(express.static('./public/images/logo-resize.png'))
 app.use(express.static(path.join(__dirname, 'storage/')));
 app.use(nocache());
 app.all('/*', function (req, res, next) {

@@ -87,14 +87,14 @@ class ProductController {
     }
   }
   async apiSearch(req, res) {
-    const { q } = req.params;
+    const { q } = req.params; //ìm kiếm các sản phẩm có tên chứa giá trị của q
     try {
-      const productSearch = await ProductModel.find({
-        name: { $regex: q, $options: 'i' },
+      const productSearch = await ProductModel.find({  //tìm kiếm tất cả các bản ghi trong bảng 
+        name: { $regex: q, $options: 'i' },// ProductModel mà trường name chứa giá trị của q
       });
-      res.json(productSearch);
+      res.json(productSearch);// trả về dữ liệu đã tìm kiếm
     } catch (error) {
-      res.status(400).json(error);
+      res.status(400).json(error);//nếu không tim thấy sẽ trả về trạng thái và lỗi
     }
   }
   async apiFilter(req, res) {
@@ -364,6 +364,21 @@ class ProductController {
       res.status(200).redirect('/product-manager/list?page=1&limit=10');
     } catch (error) {
       res.status(200).redirect('/product-manager/list?page=1&limit=10');
+    }
+  }
+
+  async searchProduct(req, res) {
+    try {
+    const keyword = req.query.keyword;     
+    const products = await ProductModel.find({
+      $or: [
+        { name: { $regex: keyword, $options: 'i' } }, // Tìm theo tên sản phẩm (không phân biệt hoa thường)
+        { description: { $regex: keyword, $options: 'i' } }, // Tìm theo mô tả sản phẩm (không phân biệt hoa thường)
+      ],
+    });
+    req.json(products) 
+    } catch (error) {
+      res.status(400).json({message: 'khong tim thay san pham'})
     }
   }
 }
