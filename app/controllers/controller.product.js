@@ -346,26 +346,47 @@ class ProductController {
     //     getS3ResponsenEntity(entity)
     //   ) || null;
 
-    const product = {
-      name,
-      discount,
-      flash_sale: flashsale,
-      article: content,
-      slug,
-      amount,
-      category,
-      brand,
-      option,
-      color,
-      specification,
-    };
-    try {
-      await ProductModel.update({ _id: id }, product);
-      res.status(200).redirect('/product-manager/list?page=1&limit=10');
-    } catch (error) {
-      res.status(200).redirect('/product-manager/list?page=1&limit=10');
-    }
+  //   const product = {
+  //     name,
+  //     discount,
+  //     flash_sale: flashsale,
+  //     article: content,
+  //     slug,
+  //     amount,
+  //     category,
+  //     brand,
+  //     option,
+  //     color,
+  //     specification,
+  //   };
+  //   try {
+  //     await ProductModel.update({ _id: id }, product);
+  //     res.status(200).redirect('/product-manager/list?page=1&limit=10');
+  //   } catch (error) {
+  //     res.status(200).redirect('/product-manager/list?page=1&limit=10');
+  //   }
+  // }
+
+  const product = {
+    name,
+    discount,
+    flash_sale: flashsale,
+    article: content,
+    slug,
+    amount,
+    category,
+    brand,
+    option,
+    color,
+    specification,
+  };
+  try {
+    await ProductModel.updateOne({ _id: id }, product);
+    res.status(200).redirect('/product-manager/list?page=1&limit=10');
+  } catch (error) {
+    res.status(200).redirect('/product-manager/list?page=1&limit=10');
   }
+}
 
   async searchProduct(req, res) {
     try {

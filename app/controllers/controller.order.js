@@ -98,6 +98,64 @@ class OrderController {
   //     next(error);
   //   }
   // };
+// [GET] api/store/:id
+  // GetOderById  = async (req, res, next) => {
+  //   try {
+  //     //console.log(req.headers);
+  //     if (req.headers['authorization']) {
+  //       const userToken = req.headers['authorization'].split(' ')[1];
+  //       const { _id: userId } = jwt.decode(userToken);
+  //       const orderId = req.params.id;// Lấy orderId từ tham số URL
+  //       console.log(orderId);
+  //       // Kiểm tra orderId nếu cần thiết (vd: validate orderId có hợp lệ)
+  
+  //       // Update đơn hàng dựa trên orderId và userId
+  //       const OrderInfo =  await orderModel.findOne({ 
+  //         _id: orderId,
+  //         userId: userId, 
+  //       });
+  //       if (!updatedOrder) {
+  //         return res.status(404).json({ message: 'Order not found' });
+  //       }
+  
+  //       res.status(200).json(OrderInfo);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //     next(error);
+  //   }
+  // };
+  GetOderById  = async (req, res, next) => {
+    try {
+      if (req.headers['authorization']) {
+        const userToken = req.headers['authorization'].split(' ')[1];
+        const { _id: userId } = jwt.decode(userToken);
+        const orderId = req.params.id; // Lấy orderId từ tham số URL
+
+        // Kiểm tra orderId nếu cần thiết (vd: validate orderId có hợp lệ)
+
+        // Tìm đơn hàng dựa trên orderId và userId
+        const order = await orderModel.findById({
+          _id: orderId,
+          userId: userId,
+        });
+
+        if (!order) {
+          return res.status(404).json({ message: 'Order not found' });
+        }
+
+        // Kiểm tra xem đơn hàng thuộc về người dùng đã xác thực
+        if (order.userId !== userId) {
+          return res.status(403).json({ message: 'Access denied' });
+        }
+
+        res.json(order);
+      }
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  }
   updateOrderById  = async (req, res, next) => {
     try {
       //console.log(req.headers);
@@ -109,7 +167,7 @@ class OrderController {
         console.log(orderId);
         // Kiểm tra orderId nếu cần thiết (vd: validate orderId có hợp lệ)
   
-        // Xóa đơn hàng dựa trên orderId và userId
+        // Update đơn hàng dựa trên orderId và userId
         const updatedOrder = await orderModel.findByIdAndUpdate(
                 orderId,
                 updatedData,
@@ -147,7 +205,7 @@ class OrderController {
         // Kiểm tra orderId nếu cần thiết (vd: validate orderId có hợp lệ)
   
         // Xóa đơn hàng dựa trên orderId và userId
-        const deletedOrder = await orderModel.findOneAndDelete({
+        const deletedOrder = await orderModel.findByIdAndRemove({
           _id: orderId,
           userId: userId,
         });

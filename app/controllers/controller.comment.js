@@ -111,6 +111,7 @@ class CommentController {
       return res.status(400).redirect('/comment-manager/list');
     }
   }
+  // DELETE comment
 }
 
 module.exports = new CommentController();

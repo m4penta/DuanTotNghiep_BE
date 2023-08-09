@@ -3,23 +3,27 @@ const jwt = require('jsonwebtoken');
 const userModel = require('../models/model.user');
 
 class AuthController {
-  async login(req, res) {
+  async login(req, res) {  //xử lý việc người dùng đăng nhập
     try {
+      // trích xuất email và password từ phần thân của yêu cầu sử dụng việc giải nén (destructuring assignment)
       const { email, password } = req.body;
-      if (!(email && password)) {
+      //kiểm tra xem cả email và password có được cung cấp trong yêu cầu
+      if (!(email && password)) { 
         return res
           .status(400)
           .json({ status: false, message: 'All input is required!' });
       }
+      //tìm một người dùng với địa chỉ email đã cung cấp
+      const user = await userModel.findOne({ email }); 
 
-      const user = await userModel.findOne({ email });
-
-      if (!user) {
+      if (!user) { //Nếu không tìm thấy người dùng với địa chỉ email
         return res
           .status(400)
           .json({ status: false, message: 'Email is not existed!' });
       }
+      // tiến hành so sánh mật khẩu được cung cấp với mật khẩu đã được lưu trữ sử dụng bcrypt.compare
       if (user && (await bcrypt.compare(password, user.password))) {
+        //tạo một đối tượng userSign chứa một số chi tiết về người dùng
         const userSign = {
           _id: user._id,
           firstName: user.firstName,
@@ -36,6 +40,8 @@ class AuthController {
           '🚀 ~ file: controller.user.js ~ line 34 ~ AuthController ~ login ~ userSign',
           userSign
         );
+        // tạo một mã thông báo (token) sử dụng đối tượng userSign, 
+        // một khóa bí mật từ biến môi trường (TOKEN_KEY), và thời gian hết hạn sau 2 giờ.
         const token = jwt.sign(userSign, process.env.TOKEN_KEY, {
           expiresIn: '2h',
         });
@@ -52,18 +58,26 @@ class AuthController {
   }
   async register(req, res) {
     try {
+      //trích xuất thông tin người dùng từ phần thân của yêu cầu
       const { firstName, lastName, email, password, role, image } = req.body;
 
+      // bất kỳ trường thông tin nào bị thiếu (null hoặc không tồn tại),
+      // một phản hồi lỗi 400 Bad Request sẽ được trả về, cho biết cần phải nhập đủ thông tin.
       if (!(firstName && lastName && email && password && role && image)) {
         return res.status(400).json({ message: 'All input is required!' });
       }
+
+      //kiểm tra xem người dùng với địa chỉ email đã cung cấp đã tồn tại chưa
       const existUser = await userModel.findOne({ email });
       if (existUser) {
         return res.status(400).json({ message: 'User email already exist!' });
       }
 
+      // mã sử dụng bcrypt.hash để mã hóa mật khẩu mới của người dùng với mức độ an toàn là 10 
+      // (có nghĩa là thời gian mã hóa mật khẩu sẽ mất khoảng 2^10 lần so với mật khẩu gốc).
       const encryptedPassword = await bcrypt.hash(password, 10);
 
+      //tạo một người dùng mới trong cơ sở dữ liệu
       const user = await userModel.create({
         firstName,
         lastName,
@@ -72,6 +86,7 @@ class AuthController {
         role,
         image,
       });
+      //mã tạo một mã thông báo (token) JSON Web Token (JWT) bằng cách sử dụng thông tin của người dùng
       const token = jwt.sign(
         {
           user_id: user._id,
@@ -101,22 +116,45 @@ class AuthController {
       return res.status(400).redirect('/');
     }
   }
+  // async userAuthorize(req, res) {
+  //   const { id } = req.params;
+  //   if (id) {
+  //     try {
+  //       await userModel.update({ _id: id }, { role: 'admin' });
+  //       res.status(300).redirect('/user-manager/list');
+  //     } catch (error) {
+  //       res.status(300).redirect('/user-manager/list');
+  //     }
+  //   }
+  // }
   async userAuthorize(req, res) {
     const { id } = req.params;
     if (id) {
       try {
-        await userModel.update({ _id: id }, { role: 'admin' });
+        await userModel.updateOne({ _id: id }, { role: 'admin' });
         res.status(300).redirect('/user-manager/list');
       } catch (error) {
         res.status(300).redirect('/user-manager/list');
       }
     }
   }
+  // async userUnAuthorize(req, res) {
+  //   const { id } = req.params;
+  //   if (id) {
+  //     try {
+  //       await userModel.update({ _id: id }, { role: 'user' });
+  //       res.status(300).redirect('/user-manager/list');
+  //     } catch (error) {
+  //       res.status(300).redirect('/user-manager/list');
+  //     }
+  //   }
+  // }
+
   async userUnAuthorize(req, res) {
     const { id } = req.params;
     if (id) {
       try {
-        await userModel.update({ _id: id }, { role: 'user' });
+        await userModel.updateOne({ _id: id }, { role: 'user' });
         res.status(300).redirect('/user-manager/list');
       } catch (error) {
         res.status(300).redirect('/user-manager/list');
