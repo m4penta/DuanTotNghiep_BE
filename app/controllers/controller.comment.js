@@ -2,7 +2,7 @@ const commentModel = require('../models/model.comment');
 const productModel = require('../models/model.product');
 const replyCommentModel = require('../models/model.replyComment');
 const userModel = require('../models/model.user');
-
+const jwt = require('jsonwebtoken');
 class CommentController {
   // [GET] get all comments
   index = async (req, res) => {
@@ -55,6 +55,33 @@ class CommentController {
       res.status(400).json(error);
     }
   }
+  
+  add = async (req, res, next) => {
+    try {
+      // Kiểm tra xem người dùng đã xác thực chưa
+      if (req.headers['authorization']) {
+        const userToken = req.headers['authorization'].split(' ')[1];
+        const { _id: userId } = jwt.decode(userToken);
+
+        const { content, product } = req.body;
+
+        // Tạo mới comment với thông tin người dùng đã xác thực
+        const newComment = await commentModel.create({ content, user: userId, product });
+        console.log(
+                '🚀 ~ file: controller.comment.js ~ line 48 ~ CommentController ~ add ~ comment',
+                newComment
+              );
+        res.status(200).json(newComment);
+      } else {
+        // Trường hợp người dùng chưa xác thực
+        res.status(401).json({ message: 'Unauthorized: You need to authenticate to add a comment' });
+      }
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  };
+
 
   async adminGetList(req, res) {
     try {
@@ -112,6 +139,54 @@ class CommentController {
     }
   }
   // DELETE comment
-}
+  async admindelete(req, res) {
+    try {
+      const { id } = req.params;
+      // Tìm comment theo id và xóa nó
+      const deletedComment = await commentModel.findByIdAndDelete(id);
+
+      // Nếu comment không tồn tại, trả về lỗi 404
+      if (!deletedComment) {
+        return res.status(404).json({ message: 'Comment not found' });
+      }
+
+      // Xóa các reply comment liên quan đến comment này
+      await replyCommentModel.deleteMany({ _id: { $in: deletedComment.replyComment } });
+      console.log(req.body.user)
+      return res.redirect('/comment-manager/list');
+      
+    } catch (error) {
+      res.status(500).json({ message: 'Error deleting comment', error });
+    }
+  }
+
+delete = async (req, res, next) => {
+  try {
+    // Kiểm tra xem người dùng đã xác thực chưa
+    if (req.headers['authorization']) {
+      const userToken = req.headers['authorization'].split(' ')[1];
+      const { _id: userId } = jwt.decode(userToken);
+
+      const commentId = req.params.id;
+
+      // Tìm comment theo id và user, sau đó xóa nếu tìm thấy
+      const deletedComment = await commentModel.findOneAndDelete({ _id: commentId, user: userId });
+
+      if (!deletedComment) {
+        return res.status(404).json({ message: 'Comment not found' });
+      }
+
+      res.status(200).json({ message: 'Comment deleted successfully' });
+    } else {
+      // Trường hợp người dùng chưa xác thực
+      res.status(401).json({ message: 'Unauthorized: You need to authenticate to delete a comment' });
+    }
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+ }
 
 module.exports = new CommentController();

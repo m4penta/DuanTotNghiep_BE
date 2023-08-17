@@ -5,6 +5,6 @@ const ReplyCommentController = require('../../app/controllers/controller.replyCo
 Router.get('/', CommentController.index);
 Router.get('/:id', CommentController.detail);
 Router.post('/add', CommentController.add);
-Router.post('/reply', ReplyCommentController.add);
-
+Router.post('/reply', ReplyCommentController.addReply);
+Router.delete('/delete/:id', CommentController.delete)
 module.exports = Router;

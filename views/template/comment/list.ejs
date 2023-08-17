@@ -53,7 +53,20 @@
                         </td>
                         <td><%= comment?.user?.firstName + ' ' + comment?.user?.lastName %></td>
                         <td><%= comment?.user?.email %></td>
-                        <td><a href="/comment-manager/detail?id=<%= comment._id %>">Chi tiết</a></td>
+                        <td><a href="/comment-manager/detail?id=<%= comment._id %>"><button
+                          type="button"
+                          class="btn btn-block btn-primary btn-sm"
+                        >
+                          Chi tiết
+                        </button></a></td>
+                        <td><a href="/comment-manager/delete/<%= comment._id %>"
+                          ><button
+                            type="button"
+                            class="btn btn-block btn-danger btn-sm"
+                          >
+                            Xóa bình luận
+                          </button></a
+                        ></td>
                       </tr>
                       <% }) %>
                     </tbody>

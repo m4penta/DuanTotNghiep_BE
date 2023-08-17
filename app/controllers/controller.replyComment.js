@@ -1,7 +1,7 @@
 const ReplyCommentModel = require('../models/model.replyComment');
 const CommentModel = require('../models/model.comment');
 class ReplyCommentController {
-  async add(req, res) {
+  async addReply(req, res) {
     const { product, content, user } = req.body;
     const { id } = req.query;
 

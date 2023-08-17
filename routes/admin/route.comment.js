@@ -6,5 +6,5 @@ const replyCommentController = require('../../app/controllers/controller.replyCo
 router.get('/list', commentController.adminGetList);
 router.get('/detail', commentController.adminGetDetail);
 router.post('/reply', commentController.adminPostReply);
-
+router.get('/delete/:id', commentController.admindelete)
 module.exports = router;
