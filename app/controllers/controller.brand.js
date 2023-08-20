@@ -54,9 +54,11 @@ class BrandController {
       });
     }
   }
+
   async adminGetAdd(req, res) {
     res.status(200).render('template/brand/add', { message: '' });
   }
+
   async adminDeleteOne(req, res) {
     const { id } = req.params;
     try {
@@ -66,6 +68,7 @@ class BrandController {
       res.redirect('/brand-manager/list');
     }
   }
+  
   async adminGetUpdate(req, res) {
     try {
       const { id } = req.query;
