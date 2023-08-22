@@ -1,6 +1,7 @@
 const productRouter = require('./api/router.product');
 const categoryRouter = require('./api/router.category');
 const commentRouter = require('./api/router.comment');
+const commentRep = require('./api/router.commentRep');
 const userRouter = require('./api/router.user');
 const adminRootRouter = require('./admin/router.admin');
 const adminProductRouter = require('./admin/route.product');
@@ -25,7 +26,8 @@ const initialApp = (app) => {
   app.use('/api/comment', commentRouter);
   //order route
   app.use('/api/order', orderRouter);
-
+ //reply
+  app.use('/api/RepCmt', commentRep);
   // *** Admin Route ***
   app.use('/', adminRootRouter);
 
@@ -45,6 +47,8 @@ const initialApp = (app) => {
   app.use('/visualize', adminAuth, visualizeRouter);
   //comment
   app.use('/comment-manager', adminAuth, adminCommentRouter);
+ 
+
   // Dashboard Order
   app.use('/order', adminAuth, orderAdminRouter);
 };
