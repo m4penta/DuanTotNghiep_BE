@@ -7,7 +7,9 @@ class CommentController {
   // [GET] get all comments
   index = async (req, res) => {
     try {
+
       const comment = await commentModel.find();
+      console.log(comment)
       res.status(200).json({ status: false, comment });
     } catch (error) {
       res.status(502).json({ status: false, error });

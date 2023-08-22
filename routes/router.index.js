@@ -23,6 +23,7 @@ const initialApp = (app) => {
   app.use('/api/category', categoryRouter);
   // Comment route
   app.use('/api/comment', commentRouter);
+  //order route
   app.use('/api/order', orderRouter);
 
   // *** Admin Route ***
